@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sunday Kitchen">
+<meta name="theme-color" content="#1C1A17">
+<title>Sunday Kitchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EC;
+    --ink: #1C1A17;
+    --warm-mid: #8C7B6B;
+    --rust: #C4522A;
+    --sage: #5C7A5E;
+    --gold: #D4952A;
+    --surface: #EDE8DF;
+    --card: #FDFAF5;
+    --border: rgba(28,26,23,0.12);
+    --radius: 16px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: calc(var(--safe-top) + 14px) 20px 14px;
+    flex-shrink: 0;
+  }
+  header h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 20px; letter-spacing: -0.3px; }
+  header h1 em { font-style: italic; color: var(--gold); }
+  .day-chip { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--warm-mid); margin-top: 2px; }
+
+  /* Tabs */
+  .tabs { display: flex; background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  .tab { flex: 1; padding: 9px 4px; text-align: center; font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(247,243,236,0.4); cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* Scrollable content area */
+  .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--safe-bottom) + 20px); }
+
+  .panel { display: none; padding: 18px 16px; }
+  .panel.active { display: block; }
+
+  /* Typography */
+  .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 10px; margin-top: 22px; }
+  .section-label:first-child { margin-top: 0; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+  .card-title { font-family: 'Fraunces', serif; font-weight: 500; font-size: 16px; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: var(--warm-mid); line-height: 1.5; }
+
+  /* Inputs */
+  input[type=text], textarea {
+    width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 11px 13px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300;
+    color: var(--ink); outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+  }
+  input[type=text]:focus, textarea:focus { border-color: var(--rust); }
+  textarea { resize: none; min-height: 80px; line-height: 1.55; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 20px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s; }
+  .btn:active { transform: scale(0.97); opacity: 0.85; }
+  .btn-primary { background: var(--rust); color: #fff; width: 100%; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
+  .btn-sm { padding: 7px 13px; font-size: 12px; }
+  .btn-ghost { background: transparent; color: var(--rust); border: 1px solid var(--rust); padding: 7px 13px; font-size: 13px; }
+  .icon-btn { background: none; border: none; cursor: pointer; font-size: 15px; padding: 4px 6px; opacity: 0.5; }
+  .icon-btn:active { opacity: 1; }
+
+  /* Quick add row */
+  .quick-add { display: flex; gap: 8px; margin-bottom: 14px; }
+  .quick-add input { flex: 1; min-width: 0; }
+
+  /* List rows */
+  .list-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .list-row:last-child { border-bottom: none; }
+  .list-row-name { font-size: 14px; flex: 1; }
+  .list-row-actions { display: flex; gap: 4px; margin-left: 8px; }
+
+  /* Preference tags */
+  .pref-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+  .pref-tag { font-size: 12px; padding: 3px 9px; border-radius: 20px; }
+  .pref-tag.love { background: #EBF3EC; color: #3D6B40; }
+  .pref-tag.hate { background: #FAEAE4; color: #9B3D20; }
+  .pref-input-row { display: flex; gap: 6px; margin-top: 8px; }
+  .pref-input-row input { flex: 1; min-width: 0; font-size: 13px; padding: 9px 11px; }
+
+  /* Kid card */
+  .kid-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; margin-bottom: 12px; }
+  .kid-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; }
+  .kid-name { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; }
+  .pref-section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 12px; margin-bottom: 5px; }
+
+  /* Plan output */
+  .day-plan { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; }
+  .day-plan-header { background: var(--surface); padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  .day-name { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; }
+  .thaw-badge { font-size: 10px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; background: #FEF3E2; color: #8A5A0A; max-width: 160px; text-align: right; line-height: 1.4; }
+  .thaw-badge.urgent { background: #FAEAE4; color: #9B3D20; }
+  .day-plan-body { padding: 11px 14px; }
+  .meal-name { font-size: 15px; margin-bottom: 3px; }
+  .meal-notes { font-size: 12px; color: var(--warm-mid); line-height: 1.5; }
+
+  /* Grocery */
+  .grocery-item { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .grocery-item:last-child { border-bottom: none; }
+  .grocery-check { width: 20px; height: 20px; border: 1.5px solid var(--border); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+  .grocery-check.checked { background: var(--sage); border-color: var(--sage); }
+  .grocery-check.checked::after { content: '✓'; color: #fff; font-size: 12px; }
+  .grocery-item-text { font-size: 14px; transition: opacity 0.15s; }
+  .grocery-item-text.checked { opacity: 0.38; text-decoration: line-through; }
+
+  /* Pantry setup wizard */
+  .setup-overlay { position: fixed; inset: 0; background: var(--cream); z-index: 200; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: calc(var(--safe-top) + 60px) 16px calc(var(--safe-bottom) + 80px); }
+  .setup-header { position: fixed; top: 0; left: 0; right: 0; background: var(--ink); color: var(--cream); padding: calc(var(--safe-top) + 12px) 16px 12px; z-index: 201; }
+  .setup-header h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 18px; }
+  .setup-header p { font-size: 12px; color: var(--warm-mid); margin-top: 2px; }
+  .setup-footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--cream); border-top: 1px solid var(--border); padding: 12px 16px calc(var(--safe-bottom) + 12px); z-index: 201; }
+  .pantry-category { margin-bottom: 20px; }
+  .pantry-cat-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 8px; }
+  .pantry-items-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .pantry-chip { font-size: 13px; padding: 7px 13px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+  .pantry-chip.selected { background: var(--sage); border-color: var(--sage); color: #fff; }
+
+  /* Feedback */
+  .ai-thinking { text-align: center; padding: 32px 20px; color: var(--warm-mid); font-size: 14px; }
+  .spinner { width: 26px; height: 26px; border: 2px solid var(--border); border-top-color: var(--rust); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty { text-align: center; padding: 36px 20px; color: var(--warm-mid); }
+  .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+  .empty-text { font-family: 'Fraunces', serif; font-size: 15px; font-style: italic; font-weight: 300; }
+  .error-box { background: #FAEAE4; color: #9B3D20; border-radius: 10px; padding: 11px 13px; font-size: 13px; margin-bottom: 12px; line-height: 1.5; }
+  .info-box { background: #EBF3EC; color: #3D6B40; border-radius: 10px; padding: 11px 13px; font-size: 13px; margin-bottom: 12px; line-height: 1.5; }
+  .field-label { display: block; font-size: 11px; font-weight: 500; color: var(--warm-mid); margin-bottom: 5px; margin-top: 13px; letter-spacing: 0.03em; text-transform: uppercase; }
+  .field-label:first-child { margin-top: 0; }
+
+  /* Install banner */
+  .install-banner { background: var(--ink); color: var(--cream); padding: 12px 16px; font-size: 12px; line-height: 1.5; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .install-banner span { flex: 1; opacity: 0.8; }
+  .install-dismiss { background: none; border: 1px solid rgba(255,255,255,0.2); color: var(--cream); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- Install hint banner (only shown when not in standalone) -->
+<div class="install-banner" id="install-banner" style="display:none">
+  <span>📱 Add to Home Screen for the best experience — tap Share → "Add to Home Screen"</span>
+  <button class="install-dismiss" onclick="dismissBanner()">Got it</button>
+</div>
+
+<header>
+  <h1>Sunday <em>Kitchen</em></h1>
+  <div class="day-chip" id="day-display"></div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('plan')">Plan</div>
+  <div class="tab" onclick="switchTab('freezer')">Freezer</div>
+  <div class="tab" onclick="switchTab('pantry')">Pantry</div>
+  <div class="tab" onclick="switchTab('kids')">Kids</div>
+  <div class="tab" onclick="switchTab('list')">List</div>
+</div>
+
+<div class="content">
+
+  <!-- PLAN -->
+  <div class="panel active" id="panel-plan">
+    <div class="card">
+      <div class="card-title">This week</div>
+      <div class="card-sub" style="margin-bottom:12px">Tell me what's happening — busy nights, anything you want to use up, special occasions.</div>
+      <label class="field-label">What's your week like?</label>
+      <textarea id="weekly-context" placeholder="e.g. Super busy Tuesday, want something fast. Trying to clear out the ground beef. Friday is casual — maybe tacos."></textarea>
+      <div style="margin-top:10px">
+        <button class="btn btn-primary" onclick="generatePlan()">Build my week →</button>
+      </div>
+    </div>
+    <div id="plan-output"></div>
+  </div>
+
+  <!-- FREEZER -->
+  <div class="panel" id="panel-freezer">
+    <div class="section-label">Freezer inventory</div>
+    <p style="font-size:12px;color:var(--warm-mid);margin-bottom:13px">Use 🎤 voice-to-text on your keyboard to add items fast.</p>
+    <div class="quick-add">
+      <input type="text" id="freezer-input" placeholder="e.g. 2 lbs ground beef" onkeydown="if(event.key==='Enter')addFreezerItem()">
+      <button class="btn btn-secondary btn-sm" onclick="addFreezerItem()">Add</button>
+    </div>
+    <div class="card" style="padding:4px 14px" id="freezer-list-wrap">
+      <div id="freezer-list"></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="clearUsed()">Remove used items</button>
+    </div>
+  </div>
+
+  <!-- PANTRY -->
+  <div class="panel" id="panel-pantry">
+    <div class="section-label">Pantry staples</div>
+    <p style="font-size:12px;color:var(--warm-mid);margin-bottom:13px">What you typically have on hand — so your plan doesn't ask you to buy things you own.</p>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn btn-secondary btn-sm" onclick="openPantrySetup()">✦ Quick setup checklist</button>
+    </div>
+    <div class="quick-add">
+      <input type="text" id="pantry-input" placeholder="Add an item manually" onkeydown="if(event.key==='Enter')addPantryItem()">
+      <button class="btn btn-secondary btn-sm" onclick="addPantryItem()">Add</button>
+    </div>
+    <div class="card" style="padding:4px 14px">
+      <div id="pantry-list"></div>
+    </div>
+  </div>
+
+  <!-- KIDS -->
+  <div class="panel" id="panel-kids">
+    <div class="section-label">Kids' preferences</div>
+    <p style="font-size:12px;color:var(--warm-mid);margin-bottom:14px">Update anytime. These shape every plan and shopping list.</p>
+    <div id="kids-list"></div>
+    <button class="btn btn-secondary" style="width:100%;margin-top:4px" onclick="addKid()">+ Add a kid</button>
+  </div>
+
+  <!-- GROCERY LIST -->
+  <div class="panel" id="panel-list">
+    <div class="section-label">Grocery list</div>
+    <div class="quick-add">
+      <input type="text" id="grocery-input" placeholder="Add item manually" onkeydown="if(event.key==='Enter')addGroceryItem()">
+      <button class="btn btn-secondary btn-sm" onclick="addGroceryItem()">Add</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="clearCheckedGrocery()">Clear checked</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearAllGrocery()">Clear all</button>
+    </div>
+    <div class="card" style="padding:4px 14px">
+      <div id="grocery-list"></div>
+    </div>
+  </div>
+
+</div><!-- end .content -->
+
+<!-- PANTRY SETUP OVERLAY -->
+<div class="setup-overlay" id="pantry-setup" style="display:none">
+  <div class="setup-header">
+    <h2>What's in your pantry?</h2>
+    <p>Tap everything you usually have. You can edit anytime.</p>
+  </div>
+
+  <div id="pantry-chips-area" style="margin-top:8px"></div>
+
+  <div class="setup-footer">
+    <button class="btn btn-primary" onclick="confirmPantrySetup()">Add selected items →</button>
+  </div>
+</div>
+
+<script>
+// ─── Data ────────────────────────────────────────────────────────
+const S = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)) } catch(e) { return null } },
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+};
+
+let freezer  = S.get('sk_freezer')  || [];
+let pantry   = S.get('sk_pantry')   || [];
+let kids     = S.get('sk_kids')     || [];
+let grocery  = S.get('sk_grocery')  || [];
+let lastPlan = S.get('sk_lastPlan') || null;
+
+// ─── Pantry categories ───────────────────────────────────────────
+const PANTRY_DEFAULTS = [
+  { cat: 'Oils & condiments',  items: ['Olive oil','Vegetable oil','Butter','Mayo','Ketchup','Mustard','Soy sauce','Hot sauce','Worcestershire sauce','Vinegar'] },
+  { cat: 'Canned & jarred',    items: ['Canned tomatoes','Tomato paste','Chicken broth','Canned beans','Canned corn','Canned tuna','Coconut milk','Pasta sauce'] },
+  { cat: 'Dry goods & grains', items: ['Pasta','Rice','Quinoa','Oats','Bread','Flour','Panko breadcrumbs','Lentils'] },
+  { cat: 'Spices & baking',    items: ['Salt','Black pepper','Garlic powder','Onion powder','Cumin','Paprika','Italian seasoning','Chili flakes','Cinnamon','Sugar','Brown sugar','Baking powder','Baking soda'] },
+  { cat: 'Fridge staples',     items: ['Eggs','Milk','Shredded cheese','Parmesan','Sour cream','Greek yogurt','Cream cheese','Lemons','Limes','Garlic cloves','Onions'] },
+  { cat: 'Freezer staples',    items: ['Frozen peas','Frozen corn','Frozen broccoli','Frozen edamame','Frozen mixed veggies','Frozen french fries'] },
+  { cat: 'Kids\' staples',     items: ['Peanut butter','Jelly/jam','Honey','Apple juice','Orange juice','Mac & cheese','Tortillas','Goldfish crackers','Applesauce'] },
+  { cat: 'Snacks & extras',    items: ['Olive oil spray','Chicken stock cubes','Ranch seasoning','Taco seasoning','Everything bagel seasoning'] },
+];
+
+let pantrySetupSelected = new Set();
+
+// ─── Init ────────────────────────────────────────────────────────
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const now = new Date();
+document.getElementById('day-display').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+
+// Show install banner if not in standalone mode
+if (!window.navigator.standalone) {
+  const dismissed = S.get('sk_banner_dismissed');
+  if (!dismissed) document.getElementById('install-banner').style.display = 'flex';
+}
+
+function dismissBanner() {
+  S.set('sk_banner_dismissed', true);
+  document.getElementById('install-banner').style.display = 'none';
+}
+
+// Restore last plan
+if (lastPlan) renderPlanOutput(lastPlan);
+
+// ─── Tabs ────────────────────────────────────────────────────────
+function switchTab(tab) {
+  const names = ['plan','freezer','pantry','kids','list'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === tab));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-'+tab));
+  if (tab === 'freezer') renderFreezer();
+  if (tab === 'pantry')  renderPantry();
+  if (tab === 'kids')    renderKids();
+  if (tab === 'list')    renderGrocery();
+}
+
+// ─── Freezer ─────────────────────────────────────────────────────
+function addFreezerItem() {
+  const inp = document.getElementById('freezer-input');
+  const val = inp.value.trim();
+  if (!val) return;
+  freezer.push({ id: Date.now(), name: val, used: false });
+  S.set('sk_freezer', freezer);
+  inp.value = '';
+  renderFreezer();
+}
+
+function renderFreezer() {
+  const el = document.getElementById('freezer-list');
+  if (!freezer.length) {
+    document.getElementById('freezer-list-wrap').style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+  document.getElementById('freezer-list-wrap').style.display = 'block';
+  el.innerHTML = freezer.map(item => `
+    <div class="list-row" style="${item.used ? 'opacity:0.4' : ''}">
+      <span class="list-row-name">${item.name}</span>
+      <div class="list-row-actions">
+        <button class="icon-btn" onclick="toggleUsed(${item.id})" title="${item.used ? 'Undo' : 'Mark used'}">${item.used ? '↩' : '✓'}</button>
+        <button class="icon-btn" onclick="deleteFreezer(${item.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleUsed(id) {
+  freezer = freezer.map(i => i.id === id ? {...i, used: !i.used} : i);
+  S.set('sk_freezer', freezer);
+  renderFreezer();
+}
+function deleteFreezer(id) {
+  freezer = freezer.filter(i => i.id !== id);
+  S.set('sk_freezer', freezer);
+  renderFreezer();
+}
+function clearUsed() {
+  freezer = freezer.filter(i => !i.used);
+  S.set('sk_freezer', freezer);
+  renderFreezer();
+}
+
+// ─── Pantry ──────────────────────────────────────────────────────
+function addPantryItem(text) {
+  const inp = document.getElementById('pantry-input');
+  const val = (text || inp.value).trim();
+  if (!val) return;
+  const exists = pantry.some(p => p.name.toLowerCase() === val.toLowerCase());
+  if (!exists) pantry.push({ id: Date.now() + Math.random(), name: val });
+  S.set('sk_pantry', pantry);
+  if (!text) inp.value = '';
+  renderPantry();
+}
+
+function renderPantry() {
+  const el = document.getElementById('pantry-list');
+  if (!pantry.length) {
+    el.innerHTML = `<div class="empty" style="padding:24px 0"><div class="empty-icon">🫙</div><div class="empty-text">Nothing here yet</div></div>`;
+    return;
+  }
+  el.innerHTML = pantry.map(item => `
+    <div class="list-row">
+      <span class="list-row-name">${item.name}</span>
+      <button class="icon-btn" onclick="deletePantry(${item.id})">✕</button>
+    </div>`).join('');
+}
+
+function deletePantry(id) {
+  pantry = pantry.filter(i => i.id !== id);
+  S.set('sk_pantry', pantry);
+  renderPantry();
+}
+
+// Pantry setup wizard
+function openPantrySetup() {
+  pantrySetupSelected = new Set(pantry.map(p => p.name));
+  const area = document.getElementById('pantry-chips-area');
+  area.innerHTML = PANTRY_DEFAULTS.map(cat => `
+    <div class="pantry-category">
+      <div class="pantry-cat-label">${cat.cat}</div>
+      <div class="pantry-items-grid">
+        ${cat.items.map(item => `
+          <div class="pantry-chip ${pantrySetupSelected.has(item) ? 'selected' : ''}"
+               onclick="toggleChip(this, '${item.replace(/'/g,"\\'")}')">
+            ${item}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  document.getElementById('pantry-setup').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function toggleChip(el, item) {
+  if (pantrySetupSelected.has(item)) {
+    pantrySetupSelected.delete(item);
+    el.classList.remove('selected');
+  } else {
+    pantrySetupSelected.add(item);
+    el.classList.add('selected');
+  }
+}
+
+function confirmPantrySetup() {
+  pantrySetupSelected.forEach(name => {
+    if (!pantry.some(p => p.name === name)) {
+      pantry.push({ id: Date.now() + Math.random(), name });
+    }
+  });
+  // Remove unchecked that were previously added via setup
+  const allSetupItems = PANTRY_DEFAULTS.flatMap(c => c.items);
+  pantry = pantry.filter(p => !allSetupItems.includes(p.name) || pantrySetupSelected.has(p.name));
+  S.set('sk_pantry', pantry);
+  document.getElementById('pantry-setup').style.display = 'none';
+  document.body.style.overflow = '';
+  renderPantry();
+}
+
+// ─── Kids ────────────────────────────────────────────────────────
+function addKid() {
+  const name = prompt("Kid's name:");
+  if (!name || !name.trim()) return;
+  kids.push({ id: Date.now(), name: name.trim(), loves: [], hates: [] });
+  S.set('sk_kids', kids);
+  renderKids();
+}
+
+function renderKids() {
+  const el = document.getElementById('kids-list');
+  if (!kids.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">👧👦</div><div class="empty-text">Add your kids to track preferences</div></div>`;
+    return;
+  }
+  el.innerHTML = kids.map(kid => `
+    <div class="kid-card">
+      <div class="kid-card-header">
+        <span class="kid-name">${kid.name}</span>
+        <button class="icon-btn" style="font-size:12px;opacity:0.35" onclick="deleteKid(${kid.id})">Remove</button>
+      </div>
+      <div class="pref-section-label" style="color:var(--sage)">Loves</div>
+      <div class="pref-row">
+        ${kid.loves.map(l => `<span class="pref-tag love">${l} <span onclick="removePref(${kid.id},'loves','${l.replace(/'/g,"\\'")}')">×</span></span>`).join('')}
+      </div>
+      <div class="pref-input-row">
+        <input type="text" id="love-${kid.id}" placeholder="Food they love" onkeydown="if(event.key==='Enter')addPref(${kid.id},'loves')">
+        <button class="btn btn-sm" style="background:var(--sage);color:#fff;border-radius:50px;padding:9px 13px" onclick="addPref(${kid.id},'loves')">+</button>
+      </div>
+      <div class="pref-section-label" style="color:var(--rust);margin-top:13px">Won't eat</div>
+      <div class="pref-row">
+        ${kid.hates.map(h => `<span class="pref-tag hate">${h} <span onclick="removePref(${kid.id},'hates','${h.replace(/'/g,"\\'")}')">×</span></span>`).join('')}
+      </div>
+      <div class="pref-input-row">
+        <input type="text" id="hate-${kid.id}" placeholder="Something they avoid" onkeydown="if(event.key==='Enter')addPref(${kid.id},'hates')">
+        <button class="btn btn-sm" style="background:var(--rust);color:#fff;border-radius:50px;padding:9px 13px" onclick="addPref(${kid.id},'hates')">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function addPref(kidId, type) {
+  const inputId = type === 'loves' ? `love-${kidId}` : `hate-${kidId}`;
+  const inp = document.getElementById(inputId);
+  const val = inp.value.trim().toLowerCase();
+  if (!val) return;
+  kids = kids.map(k => {
+    if (k.id !== kidId) return k;
+    if (!k[type].includes(val)) k[type].push(val);
+    return k;
+  });
+  S.set('sk_kids', kids);
+  inp.value = '';
+  renderKids();
+}
+
+function removePref(kidId, type, val) {
+  kids = kids.map(k => {
+    if (k.id !== kidId) return k;
+    k[type] = k[type].filter(v => v !== val);
+    return k;
+  });
+  S.set('sk_kids', kids);
+  renderKids();
+}
+
+function deleteKid(id) {
+  if (!confirm('Remove this kid?')) return;
+  kids = kids.filter(k => k.id !== id);
+  S.set('sk_kids', kids);
+  renderKids();
+}
+
+// ─── Grocery ─────────────────────────────────────────────────────
+function addGroceryItem(text) {
+  const inp = document.getElementById('grocery-input');
+  const val = (text || inp.value).trim();
+  if (!val) return;
+  grocery.push({ id: Date.now() + Math.random(), name: val, checked: false });
+  S.set('sk_grocery', grocery);
+  if (!text) inp.value = '';
+  renderGrocery();
+}
+
+function toggleGrocery(id) {
+  grocery = grocery.map(i => i.id === id ? {...i, checked: !i.checked} : i);
+  S.set('sk_grocery', grocery);
+  renderGrocery();
+}
+
+function clearCheckedGrocery() {
+  grocery = grocery.filter(i => !i.checked);
+  S.set('sk_grocery', grocery);
+  renderGrocery();
+}
+
+function clearAllGrocery() {
+  if (!confirm('Clear the entire list?')) return;
+  grocery = [];
+  S.set('sk_grocery', grocery);
+  renderGrocery();
+}
+
+function renderGrocery() {
+  const el = document.getElementById('grocery-list');
+  const active = grocery.filter(i => !i.checked);
+  const done   = grocery.filter(i => i.checked);
+  const all = [...active, ...done];
+  if (!all.length) {
+    el.innerHTML = `<div class="empty" style="padding:24px 0"><div class="empty-icon">🛒</div><div class="empty-text">List is empty</div></div>`;
+    return;
+  }
+  el.innerHTML = all.map(item => `
+    <div class="grocery-item" onclick="toggleGrocery(${item.id})">
+      <div class="grocery-check ${item.checked ? 'checked' : ''}"></div>
+      <span class="grocery-item-text ${item.checked ? 'checked' : ''}">${item.name}</span>
+    </div>`).join('');
+}
+
+// ─── Plan generation ─────────────────────────────────────────────
+async function generatePlan() {
+  const context = document.getElementById('weekly-context').value.trim();
+  const out = document.getElementById('plan-output');
+  out.innerHTML = `<div class="ai-thinking"><div class="spinner"></div>Building your week…</div>`;
+
+  const freezerList = freezer.filter(i => !i.used).map(i => i.name).join(', ') || 'nothing logged';
+  const pantryList  = pantry.map(i => i.name).join(', ') || 'nothing logged';
+  const kidPrefs    = kids.length
+    ? kids.map(k => `${k.name}: loves [${k.loves.join(', ')||'none noted'}], avoids [${k.hates.join(', ')||'none noted'}]`).join('\n')
+    : 'No kids added yet';
+
+  const prompt = `You are a practical family meal planner for a busy working parent with ${kids.length || 'several'} kids.
+
+FREEZER (use these first): ${freezerList}
+PANTRY STAPLES (already owned, don't add to grocery list): ${pantryList}
+KIDS' PREFERENCES:
+${kidPrefs}
+WEEK CONTEXT: ${context || 'Standard week, cook most nights'}
+
+Return a 5-night dinner plan (Monday–Friday) as JSON with no markdown, no explanation, only valid JSON.
+
+For each night:
+- day: string
+- meal: string (specific dish name)
+- notes: string (one sentence: any kid accommodations, serving tip, or swap)
+- thaw: string (what to pull from freezer and exactly when — e.g. "Pull chicken Sunday night" — or "none needed")
+- fromFreezer: boolean
+
+After the nights, include "groceryList": array of strings — only truly needed items not already in freezer or pantry.
+
+Rules:
+- Prioritize freezer proteins heavily
+- If a kid hates something, note "serve X on the side for [name]" in notes
+- Keep it realistic for a tired parent on weeknights
+- Vary the meals, don't repeat proteins back to back
+
+JSON: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false}],"groceryList":[]}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content.map(b => b.text || '').join('').replace(/```json|```/g,'').trim();
+    const plan = JSON.parse(raw);
+    lastPlan = plan;
+    S.set('sk_lastPlan', plan);
+    renderPlanOutput(plan);
+
+    // Push grocery items
+    if (plan.groceryList?.length) {
+      const existing = new Set(grocery.map(g => g.name.toLowerCase()));
+      plan.groceryList.forEach(item => {
+        if (!existing.has(item.toLowerCase())) {
+          grocery.push({ id: Date.now() + Math.random(), name: item, checked: false });
+        }
+      });
+      S.set('sk_grocery', grocery);
+    }
+  } catch(e) {
+    out.innerHTML = `<div class="error-box">Couldn't generate plan. Check your connection and try again.<br><small style="opacity:0.6">${e.message}</small></div>`;
+  }
+}
+
+function renderPlanOutput(plan) {
+  const out = document.getElementById('plan-output');
+  if (!plan?.nights?.length) { out.innerHTML = ''; return; }
+
+  let html = '';
+  if (plan.groceryList?.length) {
+    html += `<div class="info-box">✓ ${plan.groceryList.length} item${plan.groceryList.length !== 1 ? 's' : ''} added to your grocery list</div>`;
+  }
+
+  html += plan.nights.map(n => {
+    const tl = (n.thaw || '').toLowerCase();
+    const noThaw  = tl.includes('none') || tl === '';
+    const urgent  = tl.includes('tonight') || tl.includes('sunday') || tl.includes('today') || tl.includes('now');
+    return `<div class="day-plan">
+      <div class="day-plan-header">
+        <span class="day-name">${n.day}</span>
+        ${!noThaw ? `<span class="thaw-badge ${urgent ? 'urgent' : ''}">🧊 ${n.thaw}</span>` : ''}
+      </div>
+      <div class="day-plan-body">
+        <div class="meal-name">${n.meal}</div>
+        <div class="meal-notes">${n.notes}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  out.innerHTML = html;
+}
+</script>
+</body>
+</html>
