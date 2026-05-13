@@ -552,11 +552,39 @@ function renderGrocery() {
     el.innerHTML = `<div class="empty" style="padding:24px 0"><div class="empty-icon">🛒</div><div class="empty-text">List is empty</div></div>`;
     return;
   }
-  el.innerHTML = all.map(item => `
-    <div class="grocery-item" onclick="toggleGrocery(${item.id})">
-      <div class="grocery-check ${item.checked ? 'checked' : ''}"></div>
-      <span class="grocery-item-text ${item.checked ? 'checked' : ''}">${item.name}</span>
-    </div>`).join('');
+
+  // Group by meal — items without a meal go under "Other"
+  const groups = {};
+  all.forEach(item => {
+    const key = item.forMeal || 'Other';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
+  });
+
+  // Order: named meal days first in week order, then Other
+  const dayOrder = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const sortedKeys = Object.keys(groups).sort((a, b) => {
+    const ai = dayOrder.indexOf(a), bi = dayOrder.indexOf(b);
+    if (a === 'Other') return 1;
+    if (b === 'Other') return -1;
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
+
+  el.innerHTML = sortedKeys.map(day => {
+    const items = groups[day];
+    return `
+      <div style="margin-bottom:4px">
+        <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--warm-mid);padding:10px 0 4px">${day}</div>
+        ${items.map(item => `
+          <div class="grocery-item" onclick="toggleGrocery(${item.id})">
+            <div class="grocery-check ${item.checked ? 'checked' : ''}"></div>
+            <div style="flex:1">
+              <span class="grocery-item-text ${item.checked ? 'checked' : ''}">${item.name}</span>
+              ${item.alsoFor?.length ? `<span style="font-size:11px;color:var(--warm-mid);margin-left:6px">also for ${item.alsoFor.join(', ')}</span>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }).join('');
 }
 
 // ─── Plan generation ─────────────────────────────────────────────
@@ -595,17 +623,20 @@ For each night include a FULL recipe with:
   }
 
 After the nights include:
-- "groceryList": array of strings — only items not already in freezer or pantry above
+- "groceryList": array of objects — only items not already in freezer or pantry above. Each object: { "item": string, "forMeal": string (the day name this item is primarily for), "alsoFor": array of other day names if used in multiple meals (omit if only one meal) }
 
 Rules:
-- Prioritize freezer proteins heavily
+- BUILD each recipe around what is in the freezer and pantry above — these are not suggestions, they are your primary ingredients
+- Every recipe MUST use at least one freezer item or pantry staple as the hero ingredient
+- Only add grocery list items to supplement what is genuinely missing — not to replace pantry items you already have
+- Cross-reference every ingredient in every recipe against the pantry and freezer lists — if it's already there, do NOT add it to the grocery list
 - Ingredient quantities should feed a family of ${kids.length ? kids.length + 2 : 4}
 - If a kid avoids something, note "serve X on the side for [name]" in the notes field
 - Keep meals realistic for a tired weeknight parent — nothing over 45 mins total
 - Vary proteins and cuisines across the week
 - Make the dish names sound genuinely appetizing
 
-JSON format: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false,"recipe":{"prepTime":"","cookTime":"","ingredients":[],"steps":[]}}],"groceryList":[]}`;
+JSON format: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false,"recipe":{"prepTime":"","cookTime":"","ingredients":[],"steps":[]}}],"groceryList":[{"item":"","forMeal":"","alsoFor":[]}]}`;
 
   try {
     const res = await fetch('https://wandering-fire-9cad.diana-m-clough.workers.dev', {
@@ -626,9 +657,13 @@ JSON format: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":f
 
     if (plan.groceryList?.length) {
       const existing = new Set(grocery.map(g => g.name.toLowerCase()));
-      plan.groceryList.forEach(item => {
-        if (!existing.has(item.toLowerCase())) {
-          grocery.push({ id: Date.now() + Math.random(), name: item, checked: false });
+      plan.groceryList.forEach(entry => {
+        // handle both old string format and new object format gracefully
+        const name = typeof entry === 'string' ? entry : entry.item;
+        const forMeal = typeof entry === 'object' ? entry.forMeal : null;
+        const alsoFor = typeof entry === 'object' && entry.alsoFor?.length ? entry.alsoFor : [];
+        if (!existing.has(name.toLowerCase())) {
+          grocery.push({ id: Date.now() + Math.random(), name, forMeal, alsoFor, checked: false });
         }
       });
       S.set('sk_grocery', grocery);
