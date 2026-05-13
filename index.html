@@ -623,7 +623,7 @@ For each night include a FULL recipe with:
   }
 
 After the nights include:
-- "groceryList": array of objects — only items not already in freezer or pantry above. Each object: { "item": string, "forMeal": string (the day name this item is primarily for), "alsoFor": array of other day names if used in multiple meals (omit if only one meal) }
+- "groceryList": array of objects — only items not already in freezer or pantry above. CRITICAL: quantities in the grocery list MUST exactly match the quantities listed in the recipe ingredients above — copy them verbatim, do not estimate or round up.. Each object: { "item": string, "forMeal": string (the day name this item is primarily for), "alsoFor": array of other day names if used in multiple meals (omit if only one meal) }
 
 Rules:
 - BUILD each recipe around what is in the freezer and pantry above — these are not suggestions, they are your primary ingredients
