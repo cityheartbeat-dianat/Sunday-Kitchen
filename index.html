@@ -35,7 +35,6 @@
     flex-direction: column;
   }
 
-  /* Header */
   header {
     background: var(--ink);
     color: var(--cream);
@@ -46,25 +45,21 @@
   header h1 em { font-style: italic; color: var(--gold); }
   .day-chip { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--warm-mid); margin-top: 2px; }
 
-  /* Tabs */
   .tabs { display: flex; background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
   .tab { flex: 1; padding: 9px 4px; text-align: center; font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(247,243,236,0.4); cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
   .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
 
-  /* Scrollable content area */
   .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--safe-bottom) + 20px); }
 
   .panel { display: none; padding: 18px 16px; }
   .panel.active { display: block; }
 
-  /* Typography */
   .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 10px; margin-top: 22px; }
   .section-label:first-child { margin-top: 0; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
   .card-title { font-family: 'Fraunces', serif; font-weight: 500; font-size: 16px; margin-bottom: 4px; }
   .card-sub { font-size: 12px; color: var(--warm-mid); line-height: 1.5; }
 
-  /* Inputs */
   input[type=text], textarea {
     width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
     padding: 11px 13px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300;
@@ -73,7 +68,6 @@
   input[type=text]:focus, textarea:focus { border-color: var(--rust); }
   textarea { resize: none; min-height: 80px; line-height: 1.55; }
 
-  /* Buttons */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 20px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s; }
   .btn:active { transform: scale(0.97); opacity: 0.85; }
   .btn-primary { background: var(--rust); color: #fff; width: 100%; }
@@ -83,17 +77,14 @@
   .icon-btn { background: none; border: none; cursor: pointer; font-size: 15px; padding: 4px 6px; opacity: 0.5; }
   .icon-btn:active { opacity: 1; }
 
-  /* Quick add row */
   .quick-add { display: flex; gap: 8px; margin-bottom: 14px; }
   .quick-add input { flex: 1; min-width: 0; }
 
-  /* List rows */
   .list-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); }
   .list-row:last-child { border-bottom: none; }
   .list-row-name { font-size: 14px; flex: 1; }
   .list-row-actions { display: flex; gap: 4px; margin-left: 8px; }
 
-  /* Preference tags */
   .pref-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
   .pref-tag { font-size: 12px; padding: 3px 9px; border-radius: 20px; }
   .pref-tag.love { background: #EBF3EC; color: #3D6B40; }
@@ -101,21 +92,41 @@
   .pref-input-row { display: flex; gap: 6px; margin-top: 8px; }
   .pref-input-row input { flex: 1; min-width: 0; font-size: 13px; padding: 9px 11px; }
 
-  /* Kid card */
   .kid-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; margin-bottom: 12px; }
   .kid-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; }
   .kid-name { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; }
   .pref-section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 12px; margin-bottom: 5px; }
 
-  /* Plan output */
+  /* Day plan cards */
   .day-plan { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; }
   .day-plan-header { background: var(--surface); padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
   .day-name { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; }
   .thaw-badge { font-size: 10px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; background: #FEF3E2; color: #8A5A0A; max-width: 160px; text-align: right; line-height: 1.4; }
   .thaw-badge.urgent { background: #FAEAE4; color: #9B3D20; }
   .day-plan-body { padding: 11px 14px; }
-  .meal-name { font-size: 15px; margin-bottom: 3px; }
-  .meal-notes { font-size: 12px; color: var(--warm-mid); line-height: 1.5; }
+  .meal-name { font-size: 15px; margin-bottom: 3px; font-weight: 500; }
+  .meal-notes { font-size: 12px; color: var(--warm-mid); line-height: 1.5; margin-bottom: 10px; }
+
+  /* Recipe toggle */
+  .recipe-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--rust); cursor: pointer; padding: 6px 0; border: none; background: none; font-family: 'DM Sans', sans-serif; }
+  .recipe-toggle .arrow { transition: transform 0.2s; display: inline-block; }
+  .recipe-toggle.open .arrow { transform: rotate(90deg); }
+
+  /* Recipe body */
+  .recipe-body { display: none; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .recipe-body.open { display: block; }
+  .recipe-section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 7px; margin-top: 12px; }
+  .recipe-section-label:first-child { margin-top: 0; }
+  .ingredient-list { list-style: none; }
+  .ingredient-list li { font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--border); line-height: 1.4; }
+  .ingredient-list li:last-child { border-bottom: none; }
+  .ingredient-list li::before { content: '·'; margin-right: 7px; color: var(--rust); }
+  .step-list { list-style: none; counter-reset: steps; }
+  .step-list li { counter-increment: steps; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border); line-height: 1.5; display: flex; gap: 10px; }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before { content: counter(steps); font-family: 'Fraunces', serif; font-size: 15px; color: var(--rust); font-weight: 500; flex-shrink: 0; width: 16px; line-height: 1.3; }
+  .cook-meta { display: flex; gap: 12px; margin-bottom: 12px; }
+  .cook-meta-item { font-size: 12px; color: var(--warm-mid); display: flex; align-items: center; gap: 4px; }
 
   /* Grocery */
   .grocery-item { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
@@ -126,7 +137,7 @@
   .grocery-item-text { font-size: 14px; transition: opacity 0.15s; }
   .grocery-item-text.checked { opacity: 0.38; text-decoration: line-through; }
 
-  /* Pantry setup wizard */
+  /* Pantry setup */
   .setup-overlay { position: fixed; inset: 0; background: var(--cream); z-index: 200; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: calc(var(--safe-top) + 60px) 16px calc(var(--safe-bottom) + 80px); }
   .setup-header { position: fixed; top: 0; left: 0; right: 0; background: var(--ink); color: var(--cream); padding: calc(var(--safe-top) + 12px) 16px 12px; z-index: 201; }
   .setup-header h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 18px; }
@@ -138,7 +149,6 @@
   .pantry-chip { font-size: 13px; padding: 7px 13px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; }
   .pantry-chip.selected { background: var(--sage); border-color: var(--sage); color: #fff; }
 
-  /* Feedback */
   .ai-thinking { text-align: center; padding: 32px 20px; color: var(--warm-mid); font-size: 14px; }
   .spinner { width: 26px; height: 26px; border: 2px solid var(--border); border-top-color: var(--rust); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -150,7 +160,6 @@
   .field-label { display: block; font-size: 11px; font-weight: 500; color: var(--warm-mid); margin-bottom: 5px; margin-top: 13px; letter-spacing: 0.03em; text-transform: uppercase; }
   .field-label:first-child { margin-top: 0; }
 
-  /* Install banner */
   .install-banner { background: var(--ink); color: var(--cream); padding: 12px 16px; font-size: 12px; line-height: 1.5; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .install-banner span { flex: 1; opacity: 0.8; }
   .install-dismiss { background: none; border: 1px solid rgba(255,255,255,0.2); color: var(--cream); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; white-space: nowrap; }
@@ -158,7 +167,6 @@
 </head>
 <body>
 
-<!-- Install hint banner (only shown when not in standalone) -->
 <div class="install-banner" id="install-banner" style="display:none">
   <span>📱 Add to Home Screen for the best experience — tap Share → "Add to Home Screen"</span>
   <button class="install-dismiss" onclick="dismissBanner()">Got it</button>
@@ -249,7 +257,7 @@
     </div>
   </div>
 
-</div><!-- end .content -->
+</div>
 
 <!-- PANTRY SETUP OVERLAY -->
 <div class="setup-overlay" id="pantry-setup" style="display:none">
@@ -257,16 +265,13 @@
     <h2>What's in your pantry?</h2>
     <p>Tap everything you usually have. You can edit anytime.</p>
   </div>
-
   <div id="pantry-chips-area" style="margin-top:8px"></div>
-
   <div class="setup-footer">
     <button class="btn btn-primary" onclick="confirmPantrySetup()">Add selected items →</button>
   </div>
 </div>
 
 <script>
-// ─── Data ────────────────────────────────────────────────────────
 const S = {
   get: k => { try { return JSON.parse(localStorage.getItem(k)) } catch(e) { return null } },
   set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
@@ -278,7 +283,6 @@ let kids     = S.get('sk_kids')     || [];
 let grocery  = S.get('sk_grocery')  || [];
 let lastPlan = S.get('sk_lastPlan') || null;
 
-// ─── Pantry categories ───────────────────────────────────────────
 const PANTRY_DEFAULTS = [
   { cat: 'Oils & condiments',  items: ['Olive oil','Vegetable oil','Butter','Mayo','Ketchup','Mustard','Soy sauce','Hot sauce','Worcestershire sauce','Vinegar'] },
   { cat: 'Canned & jarred',    items: ['Canned tomatoes','Tomato paste','Chicken broth','Canned beans','Canned corn','Canned tuna','Coconut milk','Pasta sauce'] },
@@ -292,13 +296,11 @@ const PANTRY_DEFAULTS = [
 
 let pantrySetupSelected = new Set();
 
-// ─── Init ────────────────────────────────────────────────────────
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const now = new Date();
 document.getElementById('day-display').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
 
-// Show install banner if not in standalone mode
 if (!window.navigator.standalone) {
   const dismissed = S.get('sk_banner_dismissed');
   if (!dismissed) document.getElementById('install-banner').style.display = 'flex';
@@ -309,10 +311,8 @@ function dismissBanner() {
   document.getElementById('install-banner').style.display = 'none';
 }
 
-// Restore last plan
 if (lastPlan) renderPlanOutput(lastPlan);
 
-// ─── Tabs ────────────────────────────────────────────────────────
 function switchTab(tab) {
   const names = ['plan','freezer','pantry','kids','list'];
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === tab));
@@ -346,7 +346,7 @@ function renderFreezer() {
     <div class="list-row" style="${item.used ? 'opacity:0.4' : ''}">
       <span class="list-row-name">${item.name}</span>
       <div class="list-row-actions">
-        <button class="icon-btn" onclick="toggleUsed(${item.id})" title="${item.used ? 'Undo' : 'Mark used'}">${item.used ? '↩' : '✓'}</button>
+        <button class="icon-btn" onclick="toggleUsed(${item.id})">${item.used ? '↩' : '✓'}</button>
         <button class="icon-btn" onclick="deleteFreezer(${item.id})">✕</button>
       </div>
     </div>`).join('');
@@ -399,7 +399,6 @@ function deletePantry(id) {
   renderPantry();
 }
 
-// Pantry setup wizard
 function openPantrySetup() {
   pantrySetupSelected = new Set(pantry.map(p => p.name));
   const area = document.getElementById('pantry-chips-area');
@@ -434,7 +433,6 @@ function confirmPantrySetup() {
       pantry.push({ id: Date.now() + Math.random(), name });
     }
   });
-  // Remove unchecked that were previously added via setup
   const allSetupItems = PANTRY_DEFAULTS.flatMap(c => c.items);
   pantry = pantry.filter(p => !allSetupItems.includes(p.name) || pantrySetupSelected.has(p.name));
   S.set('sk_pantry', pantry);
@@ -576,29 +574,38 @@ async function generatePlan() {
   const prompt = `You are a practical family meal planner for a busy working parent with ${kids.length || 'several'} kids.
 
 FREEZER (use these first): ${freezerList}
-PANTRY STAPLES (already owned, don't add to grocery list): ${pantryList}
+PANTRY STAPLES (already owned, do not add to grocery list): ${pantryList}
 KIDS' PREFERENCES:
 ${kidPrefs}
 WEEK CONTEXT: ${context || 'Standard week, cook most nights'}
 
-Return a 5-night dinner plan (Monday–Friday) as JSON with no markdown, no explanation, only valid JSON.
+Return a 5-night dinner plan (Monday–Friday) as JSON. No markdown, no explanation — valid JSON only.
 
-For each night:
+For each night include a FULL recipe with:
 - day: string
-- meal: string (specific dish name)
-- notes: string (one sentence: any kid accommodations, serving tip, or swap)
+- meal: string (specific, appealing dish name — not just "chicken and rice", e.g. "Garlic Butter Chicken Thighs with Herbed Rice")
+- notes: string (one sentence: kid accommodations, serving tip, or smart swap)
 - thaw: string (what to pull from freezer and exactly when — e.g. "Pull chicken Sunday night" — or "none needed")
 - fromFreezer: boolean
+- recipe: {
+    prepTime: string (e.g. "10 mins"),
+    cookTime: string (e.g. "25 mins"),
+    ingredients: array of strings (each with quantity and unit, e.g. "1.5 lbs chicken thighs", "3 cloves garlic, minced"),
+    steps: array of strings (clear, numbered cooking steps a home cook can follow — be specific about heat, timing, technique)
+  }
 
-After the nights, include "groceryList": array of strings — only truly needed items not already in freezer or pantry.
+After the nights include:
+- "groceryList": array of strings — only items not already in freezer or pantry above
 
 Rules:
 - Prioritize freezer proteins heavily
-- If a kid hates something, note "serve X on the side for [name]" in notes
-- Keep it realistic for a tired parent on weeknights
-- Vary the meals, don't repeat proteins back to back
+- Ingredient quantities should feed a family of ${kids.length ? kids.length + 2 : 4}
+- If a kid avoids something, note "serve X on the side for [name]" in the notes field
+- Keep meals realistic for a tired weeknight parent — nothing over 45 mins total
+- Vary proteins and cuisines across the week
+- Make the dish names sound genuinely appetizing
 
-JSON: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false}],"groceryList":[]}`;
+JSON format: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false,"recipe":{"prepTime":"","cookTime":"","ingredients":[],"steps":[]}}],"groceryList":[]}`;
 
   try {
     const res = await fetch('https://wandering-fire-9cad.diana-m-clough.workers.dev', {
@@ -606,7 +613,7 @@ JSON: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false}],
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: 4000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -617,7 +624,6 @@ JSON: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false}],
     S.set('sk_lastPlan', plan);
     renderPlanOutput(plan);
 
-    // Push grocery items
     if (plan.groceryList?.length) {
       const existing = new Set(grocery.map(g => g.name.toLowerCase()));
       plan.groceryList.forEach(item => {
@@ -632,6 +638,15 @@ JSON: {"nights":[{"day":"","meal":"","notes":"","thaw":"","fromFreezer":false}],
   }
 }
 
+function toggleRecipe(id) {
+  const btn = document.getElementById('recipe-btn-' + id);
+  const body = document.getElementById('recipe-body-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.querySelector('.arrow').textContent = isOpen ? '▶' : '▶';
+}
+
 function renderPlanOutput(plan) {
   const out = document.getElementById('plan-output');
   if (!plan?.nights?.length) { out.innerHTML = ''; return; }
@@ -641,10 +656,33 @@ function renderPlanOutput(plan) {
     html += `<div class="info-box">✓ ${plan.groceryList.length} item${plan.groceryList.length !== 1 ? 's' : ''} added to your grocery list</div>`;
   }
 
-  html += plan.nights.map(n => {
+  html += plan.nights.map((n, i) => {
     const tl = (n.thaw || '').toLowerCase();
-    const noThaw  = tl.includes('none') || tl === '';
-    const urgent  = tl.includes('tonight') || tl.includes('sunday') || tl.includes('today') || tl.includes('now');
+    const noThaw = tl.includes('none') || tl === '';
+    const urgent = tl.includes('tonight') || tl.includes('sunday') || tl.includes('today') || tl.includes('now');
+    const r = n.recipe || {};
+    const hasRecipe = r.ingredients?.length && r.steps?.length;
+
+    const recipeHtml = hasRecipe ? `
+      <button class="recipe-toggle" id="recipe-btn-${i}" onclick="toggleRecipe(${i})">
+        <span class="arrow">▶</span> View full recipe
+      </button>
+      <div class="recipe-body" id="recipe-body-${i}">
+        ${(r.prepTime || r.cookTime) ? `
+        <div class="cook-meta">
+          ${r.prepTime ? `<span class="cook-meta-item">⏱ Prep: ${r.prepTime}</span>` : ''}
+          ${r.cookTime ? `<span class="cook-meta-item">🔥 Cook: ${r.cookTime}</span>` : ''}
+        </div>` : ''}
+        <div class="recipe-section-label">Ingredients</div>
+        <ul class="ingredient-list">
+          ${r.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+        </ul>
+        <div class="recipe-section-label">Steps</div>
+        <ol class="step-list">
+          ${r.steps.map(step => `<li>${step}</li>`).join('')}
+        </ol>
+      </div>` : '';
+
     return `<div class="day-plan">
       <div class="day-plan-header">
         <span class="day-name">${n.day}</span>
@@ -653,6 +691,7 @@ function renderPlanOutput(plan) {
       <div class="day-plan-body">
         <div class="meal-name">${n.meal}</div>
         <div class="meal-notes">${n.notes}</div>
+        ${recipeHtml}
       </div>
     </div>`;
   }).join('');
